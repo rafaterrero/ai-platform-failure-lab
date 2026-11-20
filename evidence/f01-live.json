@@ -1,0 +1,109 @@
+{
+  "experiment": "F01-live-LLM-tool-boundary",
+  "timestamp_utc": "2026-11-19T21:10:47.880254+00:00",
+  "model_call_source": "real_ollama_api_chat",
+  "model": "qwen3:4b",
+  "done_reason": "stop",
+  "prompt_eval_count": 228,
+  "eval_count": 512,
+  "model_request_elapsed_seconds": 2.957,
+  "model_proposed_tool_call": {
+    "name": "get_deployment_status",
+    "arguments": {
+      "tenant_id": "tenant_alpha",
+      "service": "payments-api",
+      "environment": "staging"
+    }
+  },
+  "tool_executed": true,
+  "synthetic_records_only": true,
+  "same_model_tool_call_for_all_scenarios": true,
+  "scenarios": [
+    {
+      "principal": "alice",
+      "principal_tenant": "tenant_alpha",
+      "mode": "baseline",
+      "http_status": 200,
+      "verification": "verified",
+      "error_code": null,
+      "returned_deployment": {
+        "service": "payments-api",
+        "environment": "staging",
+        "status": "FAILED",
+        "reason": "READINESS_PROBE_TIMEOUT",
+        "revision": "a831c1d",
+        "observed_at": "2026-11-19T09:00:00Z"
+      },
+      "datastore_reads": 1,
+      "audit": [
+        {
+          "decision": "read",
+          "tool": "get_deployment_status"
+        }
+      ]
+    },
+    {
+      "principal": "alice",
+      "principal_tenant": "tenant_alpha",
+      "mode": "hardened",
+      "http_status": 200,
+      "verification": "verified",
+      "error_code": null,
+      "returned_deployment": {
+        "service": "payments-api",
+        "environment": "staging",
+        "status": "FAILED",
+        "reason": "READINESS_PROBE_TIMEOUT",
+        "revision": "a831c1d",
+        "observed_at": "2026-11-19T09:00:00Z"
+      },
+      "datastore_reads": 1,
+      "audit": [
+        {
+          "decision": "read",
+          "tool": "get_deployment_status"
+        }
+      ]
+    },
+    {
+      "principal": "bob",
+      "principal_tenant": "tenant_beta",
+      "mode": "baseline",
+      "http_status": 200,
+      "verification": "verified",
+      "error_code": null,
+      "returned_deployment": {
+        "service": "payments-api",
+        "environment": "staging",
+        "status": "FAILED",
+        "reason": "READINESS_PROBE_TIMEOUT",
+        "revision": "a831c1d",
+        "observed_at": "2026-11-19T09:00:00Z"
+      },
+      "datastore_reads": 1,
+      "audit": [
+        {
+          "decision": "read",
+          "tool": "get_deployment_status"
+        }
+      ]
+    },
+    {
+      "principal": "bob",
+      "principal_tenant": "tenant_beta",
+      "mode": "hardened",
+      "http_status": 403,
+      "verification": "unverified",
+      "error_code": "ACCESS_DENIED",
+      "returned_deployment": null,
+      "datastore_reads": 0,
+      "audit": [
+        {
+          "decision": "denied",
+          "tool": "get_deployment_status"
+        }
+      ]
+    }
+  ],
+  "f01_acceptance_passed": true
+}

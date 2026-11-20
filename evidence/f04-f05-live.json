@@ -1,0 +1,236 @@
+{
+  "experiment": "F04-F05-live-model-proposal-synthetic-boundaries",
+  "timestamp_utc": "2026-11-19T21:10:57.577788+00:00",
+  "model_call_source": "real_ollama_api_chat",
+  "model": "qwen3:4b",
+  "model_request_elapsed_seconds": 2.955,
+  "prompt_eval_count": 228,
+  "eval_count": 512,
+  "model_proposed_tool_call": {
+    "name": "get_deployment_status",
+    "arguments": {
+      "tenant_id": "tenant_alpha",
+      "service": "payments-api",
+      "environment": "staging"
+    }
+  },
+  "real_model_proposals": 1,
+  "f04_subsequent_proposals": "synthetic_replay_of_same_model_call",
+  "f05_tool_responses": "synthetic_fixtures",
+  "final_llm_answer_generated": false,
+  "http_status_fields_are_in_process_not_http_responses": true,
+  "f04": [
+    {
+      "mode": "baseline",
+      "proposals_submitted": 3,
+      "tool_invocations": 3,
+      "datastore_reads": 3,
+      "budget_rejections": 0,
+      "http_statuses": [
+        200,
+        200,
+        200
+      ],
+      "error_codes": [
+        null,
+        null,
+        null
+      ],
+      "verified_results": 3,
+      "audit": [
+        {
+          "decision": "dispatched",
+          "status": 200
+        },
+        {
+          "decision": "dispatched",
+          "status": 200
+        },
+        {
+          "decision": "dispatched",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "mode": "hardened",
+      "proposals_submitted": 3,
+      "tool_invocations": 1,
+      "datastore_reads": 1,
+      "budget_rejections": 2,
+      "http_statuses": [
+        200,
+        429,
+        429
+      ],
+      "error_codes": [
+        null,
+        "TOOL_CALL_BUDGET_EXCEEDED",
+        "TOOL_CALL_BUDGET_EXCEEDED"
+      ],
+      "verified_results": 1,
+      "audit": [
+        {
+          "decision": "dispatched",
+          "status": 200
+        },
+        {
+          "decision": "tool_budget_exhausted"
+        },
+        {
+          "decision": "tool_budget_exhausted"
+        }
+      ]
+    }
+  ],
+  "f05": [
+    {
+      "scenario": "complete",
+      "mode": "baseline",
+      "http_status": 200,
+      "verification": "verified",
+      "error_code": null,
+      "returned_deployment": {
+        "service": "payments-api",
+        "environment": "staging",
+        "status": "FAILED",
+        "reason": "READINESS_PROBE_TIMEOUT",
+        "revision": "a831c1d",
+        "observed_at": "2026-11-19T09:00:00Z"
+      },
+      "tool_reads": 1,
+      "audit": [
+        {
+          "decision": "evidence_accepted"
+        }
+      ]
+    },
+    {
+      "scenario": "complete",
+      "mode": "hardened",
+      "http_status": 200,
+      "verification": "verified",
+      "error_code": null,
+      "returned_deployment": {
+        "service": "payments-api",
+        "environment": "staging",
+        "status": "FAILED",
+        "reason": "READINESS_PROBE_TIMEOUT",
+        "revision": "a831c1d",
+        "observed_at": "2026-11-19T09:00:00Z"
+      },
+      "tool_reads": 1,
+      "audit": [
+        {
+          "decision": "evidence_accepted"
+        }
+      ]
+    },
+    {
+      "scenario": "missing_reason",
+      "mode": "baseline",
+      "http_status": 200,
+      "verification": "verified",
+      "error_code": null,
+      "returned_deployment": {
+        "service": "payments-api",
+        "environment": "staging",
+        "status": "FAILED",
+        "revision": "a831c1d",
+        "observed_at": "2026-11-19T09:00:00Z"
+      },
+      "tool_reads": 1,
+      "audit": [
+        {
+          "decision": "evidence_accepted"
+        }
+      ]
+    },
+    {
+      "scenario": "missing_reason",
+      "mode": "hardened",
+      "http_status": 502,
+      "verification": "unverified",
+      "error_code": "INCOMPLETE_TOOL_EVIDENCE",
+      "returned_deployment": null,
+      "tool_reads": 1,
+      "audit": [
+        {
+          "decision": "evidence_rejected"
+        }
+      ]
+    },
+    {
+      "scenario": "mismatched_service",
+      "mode": "baseline",
+      "http_status": 200,
+      "verification": "verified",
+      "error_code": null,
+      "returned_deployment": {
+        "service": "unrelated-api",
+        "environment": "staging",
+        "status": "FAILED",
+        "reason": "READINESS_PROBE_TIMEOUT",
+        "revision": "a831c1d",
+        "observed_at": "2026-11-19T09:00:00Z"
+      },
+      "tool_reads": 1,
+      "audit": [
+        {
+          "decision": "evidence_accepted"
+        }
+      ]
+    },
+    {
+      "scenario": "mismatched_service",
+      "mode": "hardened",
+      "http_status": 502,
+      "verification": "unverified",
+      "error_code": "TOOL_RESPONSE_MISMATCH",
+      "returned_deployment": null,
+      "tool_reads": 1,
+      "audit": [
+        {
+          "decision": "evidence_rejected"
+        }
+      ]
+    },
+    {
+      "scenario": "invalid_status",
+      "mode": "baseline",
+      "http_status": 200,
+      "verification": "verified",
+      "error_code": null,
+      "returned_deployment": {
+        "service": "payments-api",
+        "environment": "staging",
+        "status": "UNKNOWN",
+        "reason": "READINESS_PROBE_TIMEOUT",
+        "revision": "a831c1d",
+        "observed_at": "2026-11-19T09:00:00Z"
+      },
+      "tool_reads": 1,
+      "audit": [
+        {
+          "decision": "evidence_accepted"
+        }
+      ]
+    },
+    {
+      "scenario": "invalid_status",
+      "mode": "hardened",
+      "http_status": 502,
+      "verification": "unverified",
+      "error_code": "INVALID_DEPLOYMENT_STATUS",
+      "returned_deployment": null,
+      "tool_reads": 1,
+      "audit": [
+        {
+          "decision": "evidence_rejected"
+        }
+      ]
+    }
+  ],
+  "f04_acceptance_passed": true,
+  "f05_acceptance_passed": true
+}

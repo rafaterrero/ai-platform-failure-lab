@@ -1,0 +1,363 @@
+{
+  "experiment": "F03-live-synthetic-read-only-retry-policy",
+  "timestamp_utc": "2026-11-19T21:10:54.471476+00:00",
+  "model_call_source": "real_ollama_api_chat",
+  "model": "qwen3:4b",
+  "model_request_elapsed_seconds": 2.957,
+  "model_proposed_tool_call": {
+    "name": "get_deployment_status",
+    "arguments": {
+      "tenant_id": "tenant_alpha",
+      "service": "payments-api",
+      "environment": "staging"
+    }
+  },
+  "same_model_tool_call_for_all_scenarios": true,
+  "synthetic_dependency_responses_only": true,
+  "no_external_retries_performed": true,
+  "baseline_is_capped_at_four_attempts": true,
+  "tool_operation_policy": {
+    "hardened_max_attempts": 2,
+    "hardened_per_attempt_timeout_seconds": 0.07,
+    "hardened_operation_deadline_seconds": 0.15,
+    "hardened_backoff_seconds": 0.015
+  },
+  "scenarios": [
+    {
+      "scenario": "healthy_tool",
+      "mode": "baseline",
+      "principal": "alice",
+      "elapsed_ms": 0.047,
+      "http_status": 200,
+      "verification": "verified",
+      "error_code": null,
+      "returned_deployment": {
+        "service": "payments-api",
+        "environment": "staging",
+        "status": "FAILED",
+        "reason": "READINESS_PROBE_TIMEOUT",
+        "revision": "a831c1d",
+        "observed_at": "2026-11-19T09:00:00Z"
+      },
+      "tool_attempts": 1,
+      "tool_reads": 1,
+      "dependency_statuses": [
+        200
+      ],
+      "tool_cancellations": 0,
+      "audit": [
+        {
+          "decision": "verified",
+          "after_attempt": 1
+        }
+      ]
+    },
+    {
+      "scenario": "healthy_tool",
+      "mode": "hardened",
+      "principal": "alice",
+      "elapsed_ms": 0.047,
+      "http_status": 200,
+      "verification": "verified",
+      "error_code": null,
+      "returned_deployment": {
+        "service": "payments-api",
+        "environment": "staging",
+        "status": "FAILED",
+        "reason": "READINESS_PROBE_TIMEOUT",
+        "revision": "a831c1d",
+        "observed_at": "2026-11-19T09:00:00Z"
+      },
+      "tool_attempts": 1,
+      "tool_reads": 1,
+      "dependency_statuses": [
+        200
+      ],
+      "tool_cancellations": 0,
+      "audit": [
+        {
+          "decision": "verified",
+          "after_attempt": 1
+        }
+      ]
+    },
+    {
+      "scenario": "transient_once_503",
+      "mode": "baseline",
+      "principal": "alice",
+      "elapsed_ms": 0.034,
+      "http_status": 200,
+      "verification": "verified",
+      "error_code": null,
+      "returned_deployment": {
+        "service": "payments-api",
+        "environment": "staging",
+        "status": "FAILED",
+        "reason": "READINESS_PROBE_TIMEOUT",
+        "revision": "a831c1d",
+        "observed_at": "2026-11-19T09:00:00Z"
+      },
+      "tool_attempts": 2,
+      "tool_reads": 1,
+      "dependency_statuses": [
+        503,
+        200
+      ],
+      "tool_cancellations": 0,
+      "audit": [
+        {
+          "decision": "dependency_error",
+          "attempt": 1,
+          "dependency_status": 503
+        },
+        {
+          "decision": "verified",
+          "after_attempt": 2
+        }
+      ]
+    },
+    {
+      "scenario": "transient_once_503",
+      "mode": "hardened",
+      "principal": "alice",
+      "elapsed_ms": 15.142,
+      "http_status": 200,
+      "verification": "verified",
+      "error_code": null,
+      "returned_deployment": {
+        "service": "payments-api",
+        "environment": "staging",
+        "status": "FAILED",
+        "reason": "READINESS_PROBE_TIMEOUT",
+        "revision": "a831c1d",
+        "observed_at": "2026-11-19T09:00:00Z"
+      },
+      "tool_attempts": 2,
+      "tool_reads": 1,
+      "dependency_statuses": [
+        503,
+        200
+      ],
+      "tool_cancellations": 0,
+      "audit": [
+        {
+          "decision": "dependency_error",
+          "attempt": 1,
+          "dependency_status": 503
+        },
+        {
+          "decision": "retry_scheduled",
+          "after_attempt": 1,
+          "delay_seconds": 0.015
+        },
+        {
+          "decision": "verified",
+          "after_attempt": 2
+        }
+      ]
+    },
+    {
+      "scenario": "three_failures_then_success",
+      "mode": "baseline",
+      "principal": "alice",
+      "elapsed_ms": 0.043,
+      "http_status": 200,
+      "verification": "verified",
+      "error_code": null,
+      "returned_deployment": {
+        "service": "payments-api",
+        "environment": "staging",
+        "status": "FAILED",
+        "reason": "READINESS_PROBE_TIMEOUT",
+        "revision": "a831c1d",
+        "observed_at": "2026-11-19T09:00:00Z"
+      },
+      "tool_attempts": 4,
+      "tool_reads": 1,
+      "dependency_statuses": [
+        503,
+        503,
+        503,
+        200
+      ],
+      "tool_cancellations": 0,
+      "audit": [
+        {
+          "decision": "dependency_error",
+          "attempt": 1,
+          "dependency_status": 503
+        },
+        {
+          "decision": "dependency_error",
+          "attempt": 2,
+          "dependency_status": 503
+        },
+        {
+          "decision": "dependency_error",
+          "attempt": 3,
+          "dependency_status": 503
+        },
+        {
+          "decision": "verified",
+          "after_attempt": 4
+        }
+      ]
+    },
+    {
+      "scenario": "three_failures_then_success",
+      "mode": "hardened",
+      "principal": "alice",
+      "elapsed_ms": 15.269,
+      "http_status": 503,
+      "verification": "unverified",
+      "error_code": "RETRY_BUDGET_EXHAUSTED",
+      "returned_deployment": null,
+      "tool_attempts": 2,
+      "tool_reads": 0,
+      "dependency_statuses": [
+        503,
+        503
+      ],
+      "tool_cancellations": 0,
+      "audit": [
+        {
+          "decision": "dependency_error",
+          "attempt": 1,
+          "dependency_status": 503
+        },
+        {
+          "decision": "retry_scheduled",
+          "after_attempt": 1,
+          "delay_seconds": 0.015
+        },
+        {
+          "decision": "dependency_error",
+          "attempt": 2,
+          "dependency_status": 503
+        }
+      ]
+    },
+    {
+      "scenario": "nonretryable_403_then_success",
+      "mode": "baseline",
+      "principal": "alice",
+      "elapsed_ms": 0.035,
+      "http_status": 200,
+      "verification": "verified",
+      "error_code": null,
+      "returned_deployment": {
+        "service": "payments-api",
+        "environment": "staging",
+        "status": "FAILED",
+        "reason": "READINESS_PROBE_TIMEOUT",
+        "revision": "a831c1d",
+        "observed_at": "2026-11-19T09:00:00Z"
+      },
+      "tool_attempts": 2,
+      "tool_reads": 1,
+      "dependency_statuses": [
+        403,
+        200
+      ],
+      "tool_cancellations": 0,
+      "audit": [
+        {
+          "decision": "dependency_error",
+          "attempt": 1,
+          "dependency_status": 403
+        },
+        {
+          "decision": "verified",
+          "after_attempt": 2
+        }
+      ]
+    },
+    {
+      "scenario": "nonretryable_403_then_success",
+      "mode": "hardened",
+      "principal": "alice",
+      "elapsed_ms": 0.028,
+      "http_status": 403,
+      "verification": "unverified",
+      "error_code": "NON_RETRYABLE_DEPENDENCY_ERROR",
+      "returned_deployment": null,
+      "tool_attempts": 1,
+      "tool_reads": 0,
+      "dependency_statuses": [
+        403
+      ],
+      "tool_cancellations": 0,
+      "audit": [
+        {
+          "decision": "dependency_error",
+          "attempt": 1,
+          "dependency_status": 403
+        }
+      ]
+    },
+    {
+      "scenario": "rate_limited_retry_after",
+      "mode": "baseline",
+      "principal": "alice",
+      "elapsed_ms": 0.025,
+      "http_status": 200,
+      "verification": "verified",
+      "error_code": null,
+      "returned_deployment": {
+        "service": "payments-api",
+        "environment": "staging",
+        "status": "FAILED",
+        "reason": "READINESS_PROBE_TIMEOUT",
+        "revision": "a831c1d",
+        "observed_at": "2026-11-19T09:00:00Z"
+      },
+      "tool_attempts": 2,
+      "tool_reads": 1,
+      "dependency_statuses": [
+        429,
+        200
+      ],
+      "tool_cancellations": 0,
+      "audit": [
+        {
+          "decision": "dependency_error",
+          "attempt": 1,
+          "dependency_status": 429
+        },
+        {
+          "decision": "verified",
+          "after_attempt": 2
+        }
+      ]
+    },
+    {
+      "scenario": "rate_limited_retry_after",
+      "mode": "hardened",
+      "principal": "alice",
+      "elapsed_ms": 0.026,
+      "http_status": 503,
+      "verification": "unverified",
+      "error_code": "RETRY_DELAY_EXCEEDS_DEADLINE",
+      "returned_deployment": null,
+      "tool_attempts": 1,
+      "tool_reads": 0,
+      "dependency_statuses": [
+        429
+      ],
+      "tool_cancellations": 0,
+      "audit": [
+        {
+          "decision": "dependency_error",
+          "attempt": 1,
+          "dependency_status": 429
+        },
+        {
+          "decision": "retry_delay_exceeds_deadline",
+          "attempt": 1,
+          "delay_seconds": 0.3
+        }
+      ]
+    }
+  ],
+  "f03_acceptance_passed": true
+}

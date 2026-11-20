@@ -1,0 +1,117 @@
+{
+  "experiment": "F02-live-synthetic-tool-timeout",
+  "timestamp_utc": "2026-11-19T21:10:51.329638+00:00",
+  "model_call_source": "real_ollama_api_chat",
+  "model": "qwen3:4b",
+  "model_elapsed_seconds": 2.954,
+  "model_proposed_tool_call": {
+    "name": "get_deployment_status",
+    "arguments": {
+      "tenant_id": "tenant_alpha",
+      "service": "payments-api",
+      "environment": "staging"
+    }
+  },
+  "synthetic_tool_injection_only": true,
+  "same_model_tool_call_for_all_scenarios": true,
+  "timeout_contract_scope": "cooperative async tool simulation, NOT external service cancellation",
+  "configured_slow_seconds": 0.3,
+  "configured_tool_timeout_seconds": 0.08,
+  "scenarios": [
+    {
+      "scenario": "healthy_tool",
+      "principal": "alice",
+      "mode": "baseline",
+      "elapsed_ms": 5.129,
+      "http_status": 200,
+      "verification": "verified",
+      "returned_deployment": {
+        "service": "payments-api",
+        "environment": "staging",
+        "status": "FAILED",
+        "reason": "READINESS_PROBE_TIMEOUT",
+        "revision": "a831c1d",
+        "observed_at": "2026-11-19T09:00:00Z"
+      },
+      "error_code": null,
+      "tool_attempts": 1,
+      "tool_reads": 1,
+      "tool_cancellations": 0,
+      "audit": [
+        {
+          "decision": "read"
+        }
+      ]
+    },
+    {
+      "scenario": "healthy_tool",
+      "principal": "alice",
+      "mode": "hardened",
+      "elapsed_ms": 5.267,
+      "http_status": 200,
+      "verification": "verified",
+      "returned_deployment": {
+        "service": "payments-api",
+        "environment": "staging",
+        "status": "FAILED",
+        "reason": "READINESS_PROBE_TIMEOUT",
+        "revision": "a831c1d",
+        "observed_at": "2026-11-19T09:00:00Z"
+      },
+      "error_code": null,
+      "tool_attempts": 1,
+      "tool_reads": 1,
+      "tool_cancellations": 0,
+      "audit": [
+        {
+          "decision": "read"
+        }
+      ]
+    },
+    {
+      "scenario": "slow_tool",
+      "principal": "alice",
+      "mode": "baseline",
+      "elapsed_ms": 300.495,
+      "http_status": 200,
+      "verification": "verified",
+      "returned_deployment": {
+        "service": "payments-api",
+        "environment": "staging",
+        "status": "FAILED",
+        "reason": "READINESS_PROBE_TIMEOUT",
+        "revision": "a831c1d",
+        "observed_at": "2026-11-19T09:00:00Z"
+      },
+      "error_code": null,
+      "tool_attempts": 1,
+      "tool_reads": 1,
+      "tool_cancellations": 0,
+      "audit": [
+        {
+          "decision": "read"
+        }
+      ]
+    },
+    {
+      "scenario": "slow_tool",
+      "principal": "alice",
+      "mode": "hardened",
+      "elapsed_ms": 80.291,
+      "http_status": 504,
+      "verification": "unverified",
+      "returned_deployment": null,
+      "error_code": "TOOL_TIMEOUT",
+      "tool_attempts": 1,
+      "tool_reads": 0,
+      "tool_cancellations": 1,
+      "audit": [
+        {
+          "decision": "timeout",
+          "timeout_ms": 80
+        }
+      ]
+    }
+  ],
+  "f02_acceptance_passed": true
+}
